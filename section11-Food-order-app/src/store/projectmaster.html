@@ -1,0 +1,199 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		
+		<%@ include file="components/stylesheets.jsp"%>
+		<%@ include file="components/scripts.jsp"%>
+
+		<link href="css/bootstrap-toggle.min.css" rel="stylesheet" type="text/css" />
+    
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"> </script>
+		<link rel="shortcut icon" href="images/logo.jpg" type="image/x-icon" />
+			 <script type="text/javascript">
+         $(function () {
+             $('#datetimepicker1').datetimepicker();
+         });
+      </script>
+
+		<script type='text/JavaScript' src="js/bootstrap-toggle.min.js"></script>
+		<script type='text/JavaScript' src="js/projectMaster.js"></script>
+
+
+      
+	</head>
+		<body onload="showstatusmessage(),populateDropDowns()">
+	<div id="wrapper">
+		<form action="" id="logindetails" method="post" name="menuform">
+
+			<input type="hidden" name="username"
+				value="<%=request.getAttribute("username")%>  " id="userid" /> <input
+				type="hidden" name="password"
+				value="<%=request.getAttribute("password")%>" />
+
+		</form>
+
+		<%@ include file="components/header.jsp"%>
+		<div id="page-wrapper">
+			<div class="login-wrapper" style="margin-left: 22.5%; height: 100%;">
+				<div class="login-panel panel panel-primary" style="width: 420px">
+					<div class="panel-heading"
+						style="background-color: #0072c6 !important;">
+						<center>
+							<h3 class="panel-title" style="font-size: 18px;">Change
+								Password</h3>
+						</center>
+					</div>
+
+					<div class="panel-body">
+
+						<form role="form" method="post" name="logingForm"
+							onsubmit="return validatePasswords()">
+							<fieldset>
+						<table class="dashboard">
+							<tbody class="dashboardBody">
+								<tr class="dashboardHead">
+													<td class="dashboardData">
+										<input id="startDate" class="form-control date-picker" type="text" name="startDate"	required readonly />
+									</td>
+									
+									<td class="dashboardData">
+										<input id="endDate"	class="form-control date-picker" type="text" name="endDate"	required readonly />
+									</td>
+								</tr>
+								</tbody>
+								</table>
+						
+							</div>
+
+
+
+								<div id="errDisplay"></div>
+				
+								<div class="form-group">
+									<label>Current Password </label> <input class="form-control"
+										placeholder="Current Password" name="oldPassword"
+										id="oldPassword" type="password" autofocus>
+								</div>
+								<div class="form-group">
+									<label>New Password </label> <input class="form-control"
+										placeholder="New Password" name="newPassword" id="newPassword"
+										type="password" value="">
+								</div>
+								<div class="form-group">
+									<label> Confirm Password </label> <input class="form-control"
+										placeholder="Confirm Password" name="confirm" id="confirm"
+										type="password" value="">
+								</div>
+								
+								
+
+	
+								
+
+								<input type="submit"
+									class="btn btn-primary btn-lg btn-block chgclr"
+									style="font-size: 18px;" value="Change Password" name="cbutton" />
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- end wrapper-->
+		</div>
+	</div>
+</body>
+<%@ include file="components/scripts.jsp"%>
+<script>
+	function isPasswordValid(myInput) {
+
+		/* if(!(/^(?=.*[\d])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/).test(myInput)) {
+		    return false;
+		} */
+		return true;
+	}
+	function validatePasswords() {
+
+		var newPass = $("#newPassword").val();
+		var confirm = $("#confirm").val();
+		var oldPass = $("#oldPassword").val();
+		var startDate = $("#startDate").val();
+		alert(startDate);
+
+		
+		if ((newPass == null || newPass == "")
+				|| (confirm == null || confirm == "")
+				|| (oldPass == null || oldPass == "")) {
+			alert("All the fields are mandatory");
+			return false;
+		}
+
+		if (newPass != confirm) {
+			$("#errDisplay").html("New Password did not match");
+			$("#errDisplay").css('color', 'red');
+			document.logingForm.newPassword.value = "";
+			document.logingForm.confirm.value = "";
+			return false;
+		} else if (newPass == oldPass) {
+			$("#errDisplay").html(
+					"New Password should not be same as Old Password");
+			$("#errDisplay").css('color', 'red');
+			document.logingForm.newPassword.value = "";
+			document.logingForm.confirm.value = "";
+			return false;
+		}/* else if(!isPasswordValid(newPass)){
+		    	$("#errDisplay").html("Password must contain the following: a letter, a special character, a number, minimum 8 characters");
+		        $("#errDisplay").css('color','red');
+		        document.logingForm.newPassword.value="";
+		        document.logingForm.confirm.value="";
+		        return false;
+		    } */else {
+			var dataList = "oldPasswrd=" + encodeURIComponent(oldPass)
+					+ "&newPasswrd=" + encodeURIComponent(newPass);
+
+			PopulateUrl = "changepasswordform.htm?" + dataList;
+
+			$
+					.ajax({
+						dataType : 'json',
+						contentType : "application/json",
+						type : 'Get',
+						async : false,
+						url : PopulateUrl,
+						success : function(data) {
+
+							if (data.jsondata == "success") {
+								$("#errDisplay").html(
+										"Password changed successfully");
+								$("#errDisplay").css('color', 'green');
+								document.logingForm.oldPassword.value = "";
+								document.logingForm.newPassword.value = "";
+								document.logingForm.confirm.value = "";
+								alert("Password changed successfully, please log in with new password");
+								window.location = "login.htm";
+								return true;
+							} else {
+								$("#errDisplay").html(
+										"Current Password is incorrect");
+								$("#errDisplay").css('color', 'red');
+								document.logingForm.oldPassword.value = "";
+								document.logingForm.newPassword.value = "";
+								document.logingForm.confirm.value = "";
+								return false;
+
+							}
+
+						}
+					});
+		}
+		return false;
+	}
+</script>
+</html>

@@ -1,0 +1,6 @@
+{
+	"appId": "com.foa.android",
+	"appName": "food-order-app",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

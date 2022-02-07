@@ -1,0 +1,163 @@
+
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		
+		<%@ include file="components/stylesheets.jsp"%>
+		<%@ include file="components/scripts.jsp"%>
+
+		<link href="css/bootstrap-toggle.min.css" rel="stylesheet" type="text/css" />
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"> </script>
+		<link rel="shortcut icon" href="images/logo.jpg" type="image/x-icon" />
+			 <script type="text/javascript">
+         $(function () {
+             $('#datetimepicker1').datetimepicker();
+         });
+      </script>
+
+		<script type='text/JavaScript' src="js/bootstrap-toggle.min.js"></script>
+		<script type='text/JavaScript' src="js/projectMaster.js"></script>
+
+
+      
+	</head>
+	<body onload="showstatusmessage(),populateDropDowns()">
+		<div id="wrapper">
+			<form action="" id="logindetails" method="post" name="menuform">
+				<input type="hidden" name="username" value="<%=request.getParameter("username")%>  " id="userid" /> 
+				<input type="hidden" name="password" value="<%=request.getParameter("password")%>" />
+			</form>
+	
+			<%@ include file="components/header.jsp"%>
+	
+			<!-- Page Content -->
+			<div id="page-wrapper">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-lg-12">
+							<h1 class="page-header">Project Master</h1>
+						</div>
+						<!-- /.col-lg-12 -->
+					</div>
+					<!-- /.row -->
+					<form name="projectMasterForm" method="post" action="saveProjectMaster" id="projectMasterForm">
+						<input type="hidden" name="username" value="<%=request.getParameter("username")%>  " id="userid" /> 
+						<input type="hidden" name="password" value="<%=request.getParameter("password")%>" /> 
+						<input type="hidden" name="status" value="${status}" />
+	
+						<table class="dashboard">
+							<tbody class="dashboardBody">
+								<tr class="dashboardHead">
+									<th class="thead" scope="col">Account *</th>
+									<th class="thead" scope="col">DelEx Consultant *</th>
+									<th class="thead" scope="col">Project Name *</th>
+									<th class="thead custom" scope="col">Head Count *</th>
+									<th class="thead custom1" scope="col">Project Value *</th>
+									<th class="thead dateCol" scope="col">Start Date *</th>
+									<th class="thead dateCol" scope="col">Start Date *</th>
+									<th class="thead dateCol" scope="col">End Date *</th>
+									<th class="thead" scope="col">Project Manager *</th>
+									<th class="thead" scope="col">Delivery Manager *</th>
+									<th class="thead" scope="col">Delivery Director *</th>
+								</tr>
+								<tr class="dashboardRow">
+									<td class="dashboardData">
+										<select id="account" class="form-control" name="account" required>
+											<option value="">Select</option>
+										</select>
+									</td>
+									<td class="dashboardData">
+										<select id="delexConsultant" class="form-control" name="delexConsultant" required>
+											<option value="">Select</option>
+										</select>
+									</td>
+									<td class="dashboardData">
+										<input id="projectName" class="form-control" type="text" name="projectName" required />
+									</td>
+									
+									<td class="dashboardData">
+										<input id="headCount" class="form-control" type="text" name="headCount" required />
+									</td>
+									
+									<td class="dashboardData">
+										<input id="projectValue" class="form-control" type="text" name="projectValue" required />
+									</td>
+									
+							<!-- 		<td class="dashboardData">
+										<input id="accountValue" class="form-control" type="text" name="accountValue" required />   
+									<input id="checkDate" class="form-control date-picker" type="text" name="checkDate" required readonly /> 
+									</td> -->
+									
+
+
+									<td class="dashboardData">
+										<input id="startDate" class="form-control date-picker" type="text" name="startDate"	required readonly />
+									</td>
+									<td class="dashboardData">
+										<input id="middleDate" class="form-control date-picker" type="text" name="middleDate"	required readonly />
+									</td>
+									<td class="dashboardData">
+										<input id="endDate"	class="form-control date-picker" type="text" name="endDate"	required readonly />
+									</td>
+	
+
+	
+									<td class="dashboardData">
+										<select id="projectManager"	class="form-control" name="projectManager" required>
+											<option value="">Select</option>
+										</select>
+									</td>
+	
+									<td class="dashboardData">
+										<select id="deliveryManager" class="form-control" name="deliveryManager" required>
+											<option value="">Select</option>
+										</select>
+									</td>
+	
+									<td class="dashboardData">
+										<select id="deliveryDirector" class="form-control" name="deliveryDirector" required>
+											<option value="">Select</option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<input type="hidden" name="currentDate" id="currentDate" value='<%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date())%>' />
+						<div class="ctaSection">
+							<button type="submit" class="btn-primary" id="submitbutton">Submit</button>
+							<button type="button" id="cancelButton" class="btn-primary">Cancel</button>
+						</div>
+						<c:if test="${not empty status}">
+							<input type="hidden" id="status" name="status" value="${status}" />
+						</c:if>
+					</form>
+				</div>
+				<!-- /.container-fluid -->
+			</div>
+			<!-- End of Page-wrapper -->
+		</div>
+		<!-- End of Wrapper -->
+	</body>
+	<script type='text/JavaScript' src="js/projectMaster.js"></script>
+	<script type="text/javascript">
+	var currentDate = new Date(Date.parse($("#currentDate").val()));
+	console.log("currentDate::"+currentDate.getDay());
+	if(currentDate.getDay() === 1 && currentDate.getHours() > 11){
+		$("#submitbutton").addClass("hide");
+		$("#cancelButton").addClass("hide");
+	}else{
+		$("#submitbutton").addClass("hide");
+		$("#cancelButton").addClass("hide");
+	}
+	</script>
+</html>
